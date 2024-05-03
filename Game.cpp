@@ -13,14 +13,14 @@ void Game::InitGame(i32 ScreenWidth, i32 ScreenHeight, const char* Title)
     GrassSprite = LoadTexture("..\\res\\Tilesets\\Grass.png");
     PlayerSprite = LoadTexture("..\\res\\Characters\\Basic Charakter Spritesheet.png");
 
-    PlayerSourceRect = {
+    PlayerSourceRectangle = {
             0,
             0,
             48,
             48
     };
 
-    PlayerDestinationRect = {
+    Player.PositionRectangle = {
             200,
             200,
             100,
@@ -34,19 +34,19 @@ void Game::Input()
 {
     if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))
     {
-        PlayerDestinationRect.y -= Player.Speed;
+        Player.PositionRectangle.y -= Player.Speed;
     }
     if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))
     {
-        PlayerDestinationRect.y += Player.Speed;
+        Player.PositionRectangle.y += Player.Speed;
     }
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))
     {
-        PlayerDestinationRect.x -= Player.Speed;
+        Player.PositionRectangle.x -= Player.Speed;
     }
     if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT))
     {
-        PlayerDestinationRect.x += Player.Speed;
+        Player.PositionRectangle.x += Player.Speed;
     }
 }
 
@@ -66,7 +66,7 @@ void Game::Render()
 void Game::DrawScene()
 {
     DrawTextureV(GrassSprite, {100, 50}, WHITE);
-    DrawTexturePro(PlayerSprite, PlayerSourceRect, PlayerDestinationRect, {PlayerDestinationRect.width, PlayerDestinationRect.height}, 0, WHITE);
+    DrawTexturePro(PlayerSprite, PlayerSourceRectangle, Player.PositionRectangle, { Player.PositionRectangle.width, Player.PositionRectangle.height }, 0, WHITE);
 }
 
 void Game::Close()

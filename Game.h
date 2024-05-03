@@ -9,6 +9,7 @@
 #include "types.h"
 
 struct Player {
+    Rectangle PositionRectangle; //Destination Rect
     f32 Speed;
 };
 
@@ -20,8 +21,7 @@ class Game {
         bool Running = true;
         Texture2D GrassSprite;
         Texture2D PlayerSprite;
-        Rectangle PlayerSourceRect;
-        Rectangle PlayerDestinationRect;
+        Rectangle PlayerSourceRectangle;
 
         void InitGame(i32 ScreenWidth, i32 ScreenHeight, const char* Title);
         void Input();
