@@ -9,14 +9,22 @@
 #include "types.h"
 
 struct Player {
-    Rectangle PositionRectangle; //Destination Rect
+    Rectangle Position; //Destination Rectangle
     f32 Speed;
+    Camera2D PlayerCamera;
+};
+
+struct AudioController {
+    bool Paused;
+    Music Music;
 };
 
 class Game {
     private:
         Player Player;
+        AudioController Audio;
         Color TiffanyBlue = { 147, 211, 196, 255 };
+
     public:
         bool Running = true;
         Texture2D GrassSprite;
