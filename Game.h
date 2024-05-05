@@ -9,9 +9,14 @@
 #include "types.h"
 
 struct Player {
+    Rectangle Animation; //Source Rectangle
     Rectangle Position; //Destination Rectangle
     f32 Speed;
     Camera2D PlayerCamera;
+    bool Moving;
+    int Direction;
+    bool UP, DOWN, LEFT, RIGHT;
+    int Frame;
 };
 
 struct AudioController {
@@ -23,13 +28,13 @@ class Game {
     private:
         Player Player;
         AudioController Audio;
+        int FrameCount;
         Color TiffanyBlue = { 147, 211, 196, 255 };
 
     public:
         bool Running = true;
         Texture2D GrassSprite;
         Texture2D PlayerSprite;
-        Rectangle PlayerSourceRectangle;
 
         void InitGame(i32 ScreenWidth, i32 ScreenHeight, const char* Title);
         void Input();

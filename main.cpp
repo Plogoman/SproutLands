@@ -3,7 +3,7 @@
 int main()
 {
     Game Game;
-    Game.InitGame(1000, 600, "Sprout Lands");
+    Game.InitGame(920, 540, "Sprout Lands");
 
     while (Game.Running)
     {

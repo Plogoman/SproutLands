@@ -13,13 +13,13 @@ void Game::InitGame(i32 ScreenWidth, i32 ScreenHeight, const char* Title)
     GrassSprite = LoadTexture(R"(..\\res\\Tilesets\\Grass.png)");
     PlayerSprite = LoadTexture(R"(..\res\Characters\Basic Charakter Spritesheet.png)");
 
-    PlayerSourceRectangle = {
+    // Player Source Rectangle.
+    Player.Animation = {
             0,
             0,
             48,
             48
     };
-
     // Player Destination Rectangle.
     Player.Position = {
             200,
@@ -46,24 +46,31 @@ void Game::InitGame(i32 ScreenWidth, i32 ScreenHeight, const char* Title)
     Audio.Paused = false;
     PlayMusicStream(Audio.Music);
 }
-
 void Game::Input()
 {
     if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))
     {
-        Player.Position.y -= Player.Speed;
+        Player.Moving = true;
+        Player.Direction = 1;
+        Player.UP = true;
     }
     if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))
     {
-        Player.Position.y += Player.Speed;
+        Player.Moving = true;
+        Player.Direction = 0;
+        Player.DOWN = true;
     }
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))
     {
-        Player.Position.x -= Player.Speed;
+        Player.Moving = true;
+        Player.Direction = 2;
+        Player.LEFT = true;
     }
     if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT))
     {
-        Player.Position.x += Player.Speed;
+        Player.Moving = true;
+        Player.Direction = 3;
+        Player.RIGHT = true;
     }
 
     if (IsKeyPressed(KEY_Q))
@@ -71,10 +78,47 @@ void Game::Input()
         Audio.Paused = !Audio.Paused;
     }
 }
-
 void Game::Update()
 {
     Running = !WindowShouldClose();
+
+    if (Player.Moving)
+    {
+        if (Player.UP)
+        {
+            Player.Position.y -= Player.Speed;
+        }
+        if (Player.DOWN)
+        {
+            Player.Position.y += Player.Speed;
+        }
+        if (Player.LEFT)
+        {
+            Player.Position.x -= Player.Speed;
+        }
+        if (Player.RIGHT)
+        {
+            Player.Position.x += Player.Speed;
+        }
+        if (FrameCount % 8 == 0)
+        {
+            Player.Frame++;
+        }
+    }
+
+    if (!Player.Moving)
+    {
+        Player.Frame = 0;
+    }
+
+    FrameCount++;
+    if (Player.Frame > 3)
+    {
+        Player.Frame = 0;
+    }
+
+    Player.Animation.x = Player.Animation.width * (f32)Player.Frame;
+    Player.Animation.y = Player.Animation.height * (f32)Player.Direction;
 
     UpdateMusicStream(Audio.Music);
     if (Audio.Paused)
@@ -90,8 +134,12 @@ void Game::Update()
             (f32)(Player.Position.x - (Player.Position.width / 2.0f)),
             (f32)(Player.Position.y - (Player.Position.height / 2.0f))
     };
+    Player.Moving = false;
+    Player.UP = false;
+    Player.DOWN = false;
+    Player.LEFT = false;
+    Player.RIGHT = false;
 }
-
 void Game::Render()
 {
     BeginDrawing();
@@ -101,13 +149,11 @@ void Game::Render()
     EndMode2D();
     EndDrawing();
 }
-
 void Game::DrawScene()
 {
     DrawTextureV(GrassSprite, {100, 50}, WHITE);
-    DrawTexturePro(PlayerSprite, PlayerSourceRectangle, Player.Position, { Player.Position.width, Player.Position.height }, 0, WHITE);
+    DrawTexturePro(PlayerSprite, Player.Animation, Player.Position, { Player.Position.width, Player.Position.height }, 0, WHITE);
 }
-
 void Game::Close()
 {
     UnloadTexture(GrassSprite);
